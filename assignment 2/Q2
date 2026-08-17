@@ -1,0 +1,532 @@
+import java.util.*;
+
+
+// ================= FOOD DELIVERY SYSTEM =================
+
+
+abstract class FoodOrder {
+
+
+    private int orderId;
+    private String customerName;
+    private double amount;
+
+    protected static String restaurantName="Food Palace";
+
+    private static int orderCount=0;
+
+
+
+    public FoodOrder(int id,String name,double amount){
+
+        this.orderId=id;
+        this.customerName=name;
+        this.amount=amount;
+
+        orderCount++;
+
+    }
+
+
+    public int getOrderId(){
+        return orderId;
+    }
+
+
+    public String getCustomerName(){
+        return customerName;
+    }
+
+
+    public double getAmount(){
+        return amount;
+    }
+
+
+
+    public abstract double calculateDeliveryCharge();
+
+
+
+    public static void displayTotalOrders(){
+
+        System.out.println("Total Food Orders : "+orderCount);
+
+    }
+
+
+
+    public void displayBill(){
+
+        System.out.println("\n----- FOOD ORDER BILL -----");
+
+        System.out.println("Restaurant : "+restaurantName);
+
+        System.out.println("Order ID : "+orderId);
+
+        System.out.println("Customer : "+customerName);
+
+        System.out.println("Amount : Rs."+amount);
+
+    }
+
+}
+
+
+
+
+interface Discountable{
+
+    double applyDiscount();
+
+}
+
+
+
+
+class RegularOrder extends FoodOrder 
+implements Discountable{
+
+
+    public RegularOrder(int id,String name,double amount){
+
+        super(id,name,amount);
+
+    }
+
+
+
+    public double calculateDeliveryCharge(){
+
+        return 80;
+
+    }
+
+
+
+    public double applyDiscount(){
+
+        return getAmount()*0.10;
+
+    }
+
+
+
+    public void display(){
+
+        displayBill();
+
+        System.out.println("Discount : Rs."+applyDiscount());
+
+        System.out.println("Delivery Charge : Rs."
+                +calculateDeliveryCharge());
+
+
+        System.out.println("Final Amount : Rs."
+        +(getAmount()-applyDiscount()+calculateDeliveryCharge()));
+
+    }
+
+
+}
+
+
+
+
+class PremiumOrder extends FoodOrder 
+implements Discountable{
+
+
+    public PremiumOrder(int id,String name,double amount){
+
+        super(id,name,amount);
+
+    }
+
+
+
+    public double calculateDeliveryCharge(){
+
+        return 50;
+
+    }
+
+
+
+    public double applyDiscount(){
+
+        return getAmount()*0.15;
+
+    }
+
+
+
+    public void display(){
+
+        displayBill();
+
+        System.out.println("Discount : Rs."+applyDiscount());
+
+        System.out.println("Delivery Charge : Rs."
+                +calculateDeliveryCharge());
+
+
+        System.out.println("Final Amount : Rs."
+        +(getAmount()-applyDiscount()+calculateDeliveryCharge()));
+
+    }
+
+
+}
+
+
+
+
+class OrderUtility{
+
+
+    public static boolean validateAmount(double amount){
+
+        return amount>0;
+
+    }
+
+
+    public static boolean validateCustomer(String name){
+
+        return name!=null && !name.isEmpty();
+
+    }
+
+}
+
+
+
+
+
+// ================= LIBRARY MANAGEMENT SYSTEM =================
+
+
+
+abstract class LibraryResource{
+
+
+    private int resourceId;
+
+    private String title;
+
+    private String author;
+
+
+    protected static String libraryName="TIET Smart Library";
+
+
+    private static int resourceCount=0;
+
+
+
+    public LibraryResource(int id,String title,String author){
+
+
+        this.resourceId=id;
+
+        this.title=title;
+
+        this.author=author;
+
+
+        resourceCount++;
+
+    }
+
+
+
+    public int getResourceId(){
+
+        return resourceId;
+
+    }
+
+
+
+    public abstract double calculateFine(int days);
+
+
+
+    public void displayDetails(){
+
+
+        System.out.println("\n----- RESOURCE DETAILS -----");
+
+        System.out.println("Library : "+libraryName);
+
+        System.out.println("ID : "+resourceId);
+
+        System.out.println("Title : "+title);
+
+        System.out.println("Author : "+author);
+
+
+    }
+
+
+
+
+    public static void displayTotalResources(){
+
+        System.out.println("Total Resources : "+resourceCount);
+
+    }
+
+
+}
+
+
+
+
+interface Printable{
+
+
+    void printDetails();
+
+
+}
+
+
+
+
+class Book extends LibraryResource 
+implements Printable{
+
+
+    public Book(int id,String title,String author){
+
+        super(id,title,author);
+
+    }
+
+
+
+    public double calculateFine(int days){
+
+        return days*5;
+
+    }
+
+
+
+    public void printDetails(){
+
+        displayDetails();
+
+        System.out.println("Type : Book");
+
+    }
+
+
+}
+
+
+
+
+
+class DigitalResource extends LibraryResource 
+implements Printable{
+
+
+    public DigitalResource(int id,String title,String author){
+
+        super(id,title,author);
+
+    }
+
+
+
+    public double calculateFine(int days){
+
+        return days*2;
+
+    }
+
+
+
+
+    public void printDetails(){
+
+        displayDetails();
+
+        System.out.println("Type : Digital Resource");
+
+    }
+
+
+}
+
+
+
+
+
+class InputValidator{
+
+
+    public static boolean validateId(int id){
+
+        return id>0;
+
+    }
+
+
+
+    public static boolean validateDays(int days){
+
+        return days>=0;
+
+    }
+
+
+}
+
+
+
+
+
+
+// ================= MAIN CLASS =================
+
+
+
+public class Main{
+
+
+public static void main(String args[]){
+
+
+
+// -------- FOOD ORDERS --------
+
+
+System.out.println("\n========== FOOD DELIVERY SYSTEM ==========");
+
+
+
+FoodOrder orders[]=new FoodOrder[6];
+
+
+orders[0]=new RegularOrder(101,"Harshit",500);
+
+orders[1]=new PremiumOrder(102,"Rahul",1000);
+
+orders[2]=new RegularOrder(103,"Aman",700);
+
+orders[3]=new PremiumOrder(104,"Rohan",1200);
+
+orders[4]=new RegularOrder(105,"Karan",600);
+
+orders[5]=new PremiumOrder(106,"Vivek",900);
+
+
+
+for(FoodOrder order:orders){
+
+
+if(OrderUtility.validateAmount(order.getAmount())
+&&
+OrderUtility.validateCustomer(order.getCustomerName())){
+
+
+if(order instanceof RegularOrder)
+
+((RegularOrder)order).display();
+
+
+else
+
+((PremiumOrder)order).display();
+
+
+System.out.println("---------------------");
+
+}
+
+}
+
+
+
+FoodOrder.displayTotalOrders();
+
+
+
+
+
+
+// -------- LIBRARY SYSTEM --------
+
+
+
+System.out.println("\n\n========== SMART LIBRARY SYSTEM ==========");
+
+
+
+LibraryResource resources[]=new LibraryResource[5];
+
+
+resources[0]=new Book(1,"Java","James Gosling");
+
+resources[1]=new DigitalResource(2,"AI","Russell");
+
+resources[2]=new Book(3,"DSA","Mark Allen");
+
+resources[3]=new DigitalResource(4,"DBMS","Korth");
+
+resources[4]=new Book(5,"Operating System","Galvin");
+
+
+
+int days[]={5,3,7,10,4};
+
+
+
+double totalFine=0;
+
+
+
+for(int i=0;i<resources.length;i++){
+
+
+if(InputValidator.validateId(resources[i].getResourceId())
+&&
+InputValidator.validateDays(days[i])){
+
+
+((Printable)resources[i]).printDetails();
+
+
+double fine=resources[i].calculateFine(days[i]);
+
+
+System.out.println("Fine : Rs."+fine);
+
+
+totalFine+=fine;
+
+
+System.out.println("--------------------");
+
+
+}
+
+
+}
+
+
+
+System.out.println("Total Fine : Rs."+totalFine);
+
+
+LibraryResource.displayTotalResources();
+
+
+
+}
+
+}
