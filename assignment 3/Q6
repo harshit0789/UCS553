@@ -1,0 +1,114 @@
+import java.util.Scanner;
+
+// Invalid Username Exception
+class InvalidUsernameException extends Exception {
+
+    public InvalidUsernameException(String message) {
+        super(message);
+    }
+}
+
+// Invalid Password Exception
+class InvalidPasswordException extends Exception {
+
+    public InvalidPasswordException(String message) {
+        super(message);
+    }
+}
+
+// Account Locked Exception
+class AccountLockedException extends Exception {
+
+    public AccountLockedException(String message) {
+        super(message);
+    }
+}
+
+public class Experiment6 {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String correctUsername = "admin";
+        String correctPassword = "1234";
+
+        int maxAttempts = 3;
+        int attempts = 0;
+        boolean loginSuccessful = false;
+
+        try {
+
+            while (attempts < maxAttempts && !loginSuccessful) {
+
+                try {
+
+                    System.out.print("Enter username: ");
+                    String username = sc.nextLine();
+
+                    System.out.print("Enter password: ");
+                    String password = sc.nextLine();
+
+                    if (!username.equals(correctUsername)) {
+                        throw new InvalidUsernameException(
+                            "Invalid username."
+                        );
+                    }
+
+                    if (!password.equals(correctPassword)) {
+                        throw new InvalidPasswordException(
+                            "Invalid password."
+                        );
+                    }
+
+                    loginSuccessful = true;
+
+                    System.out.println(
+                        "Login successful! Welcome " + username
+                    );
+
+                } catch (InvalidUsernameException e) {
+
+                    attempts++;
+                    System.out.println(
+                        "InvalidUsernameException: "
+                        + e.getMessage()
+                    );
+
+                } catch (InvalidPasswordException e) {
+
+                    attempts++;
+                    System.out.println(
+                        "InvalidPasswordException: "
+                        + e.getMessage()
+                    );
+                }
+
+                if (!loginSuccessful && attempts == maxAttempts) {
+                    throw new AccountLockedException(
+                        "Maximum attempts exceeded. Account locked."
+                    );
+                }
+
+                if (!loginSuccessful) {
+                    System.out.println(
+                        "Attempts remaining: "
+                        + (maxAttempts - attempts)
+                    );
+                }
+            }
+
+        } catch (AccountLockedException e) {
+
+            System.out.println(
+                "AccountLockedException: " + e.getMessage()
+            );
+
+        } finally {
+
+            System.out.println("Login process completed.");
+        }
+
+        sc.close();
+    }
+}
