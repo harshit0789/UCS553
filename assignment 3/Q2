@@ -1,0 +1,35 @@
+public class Experiment2 {
+
+    public static void main(String[] args) {
+
+        try {
+            System.out.println("Outer try block started.");
+
+            try {
+                System.out.println("Inner try block started.");
+
+                int a = 10 / 0;
+
+            } catch (ArithmeticException e) {
+                System.out.println("Inner catch: Cannot divide by zero.");
+            }
+
+            try {
+                int[] arr = {1, 2, 3};
+                System.out.println(arr[5]);
+
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Inner catch: Invalid array index.");
+            }
+
+            // Exception handled by outer catch
+            String str = null;
+            System.out.println(str.length());
+
+        } catch (NullPointerException e) {
+            System.out.println("Outer catch: Null value encountered.");
+        }
+
+        System.out.println("Program continues normally.");
+    }
+}
